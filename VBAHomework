@@ -1,0 +1,72 @@
+Option Explicit
+
+Sub StockData()
+    
+    'Looping through sheets
+    
+    Dim ws As Worksheet
+    
+    For Each ws In ActiveWorkbook.Worksheets
+    ws.Activate
+    
+    'Determine the last row
+    
+    Dim lastRow As Long
+    lastRow = ActiveSheet.Cells(ActiveSheet.Rows.Count, "A").End(xlUp).Row
+
+    'Adding headders
+            
+            Cells(1, "I").Value = "Ticker"
+            Cells(1, "J").Value = "Total Stock Volume"
+    
+    'Declare variables
+    
+    Dim Ticker As String
+    Dim Total_Volume As Double
+    Dim i As Double
+    Dim j As Double
+    Dim Summary_Table_Row As Integer
+    
+    'Assigning value to variables
+    
+    Total_Volume = 0
+    Summary_Table_Row = 2
+    
+    'Create i loop
+    
+        For i = 2 To lastRow
+        
+            If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+            
+            'Set Ticker
+            Ticker = Cells(i, 1).Value
+            
+            'Add Total Volume
+            Total_Volume = Total_Volume + Cells(i, 7).Value
+
+            'Put Ticker in Summary Table
+            Range("I" & Summary_Table_Row).Value = Ticker
+            
+            'Put Total Volume in Summary Table
+            Range("J" & Summary_Table_Row).Value = Total_Volume
+            
+            'Add to the summary table row
+            Summary_Table_Row = Summary_Table_Row + 1
+            
+            'Reset variables to 0
+            Total_Volume = 0
+            j = 0
+            
+            'If the cell immediately following a row ...
+            
+            Else
+            Total_Volume = Total_Volume + Cells(i, 7).Value
+            
+            End If
+        
+        Next i
+        
+    Next ws
+    
+End Sub
+
